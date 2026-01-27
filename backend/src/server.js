@@ -7,12 +7,13 @@ import { clerkMiddleware } from "@clerk/express";
 
 const app = express();
 
-app.use(express.json());
-
-// ✅ Inngest MUST come BEFORE Clerk
+// ✅ 1. Inngest FIRST (raw body, no middleware before)
 app.use("/api/inngest", serve({ client: inngest, functions }));
 
-// ✅ Clerk AFTER Inngest
+// ✅ 2. JSON parser AFTER Inngest
+app.use(express.json());
+
+// ✅ 3. Clerk AFTER Inngest
 app.use(clerkMiddleware());
 
 app.get("/", (req, res) => {
